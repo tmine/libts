@@ -1,0 +1,1 @@
+/// <reference path="tsc/lang/thread.ts"/>
