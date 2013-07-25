@@ -1,3 +1,5 @@
-interface Observer {
-    update (arg:any);
+module tsc.util{
+	export interface Observer {
+	    update (arg:any);
+	}
 }
