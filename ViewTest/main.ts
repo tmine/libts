@@ -1,9 +1,8 @@
 /// <reference path="../tsc/ui/TemplateElementLoader.ts"/>
 /// <reference path="../tsc/ui/View.ts"/>
 var TemplateElementLoader = tsc.ui.TemplateElementLoader;
-var View = tsc.ui.View;
 
-class MyView extends View{
+class MyView extends tsc.ui.View{
     
 	constructor(){		
 		// get the template Element with the TemplateElementLoader Class
@@ -19,7 +18,7 @@ class MyView extends View{
 
 } 
 
-class MyOtherView extends View{
+class MyOtherView extends tsc.ui.View{
     constructor(){
         // construct your view
     	super("Template.html", () => {

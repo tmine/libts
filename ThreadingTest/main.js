@@ -22,6 +22,8 @@ var tsc;
 })(tsc || (tsc = {}));
 var tsc;
 (function (tsc) {
+    /// <reference path="../util/Queue.ts"/>
+    /// <reference path="Runnable.ts"/>
     (function (lang) {
         var Scheduler = (function () {
             function Scheduler() {
@@ -52,6 +54,8 @@ var tsc;
 })(tsc || (tsc = {}));
 var tsc;
 (function (tsc) {
+    /// <reference path="Scheduler.ts"/>
+    /// <reference path="Runnable.ts"/>
     (function (main) {
         function isFunction(functionToCheck) {
             var getType = {};
@@ -111,20 +115,25 @@ var tsc;
     })(tsc.main || (tsc.main = {}));
     var main = tsc.main;
 })(tsc || (tsc = {}));
+/// <reference path="../tsc/lang/Thread.ts"/>
 var Thread = tsc.main.Thread;
 
+/* main */
 var MyThread = (function () {
     function MyThread(id) {
         this.id = id;
     }
     MyThread.prototype.init = function () {
+        // initialise all vars here
         this.i = 0;
     };
 
     MyThread.prototype.run = function () {
         if (this.i <= 10) {
+            //console.log(this.id + " " + this.i);
             this.i++;
         } else {
+            // return something != null to terminate
             console.log("Thread " + this.id + " terminated");
             return 0;
         }

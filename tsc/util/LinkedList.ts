@@ -11,7 +11,7 @@ module tsc.util{
 		}
 	}
 	
-	export class LinkedList<T> implements tsc.util.List {
+	export class LinkedList<T> implements tsc.util.List<T> {
 		private first : ListNode;
 		
 		public add(item : T){
