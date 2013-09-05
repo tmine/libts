@@ -10,5 +10,7 @@ ViewTest:
 tsc:
 	tsc tsc/tsc.ts -out tsc/tsc.js
 	cp tsc/lang/WorkerSource.js tsc/WorkerSource.js
+	cat tsc/*/*.ts >> tsc/tsc.lib.ts
+	tsc tsc/tsc.ts -d -out tsc/tsc.d.ts
 
 .PHONY: tsc ViewTest ThreadingTest
