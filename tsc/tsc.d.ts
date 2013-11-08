@@ -43,7 +43,7 @@ declare module tsc.ui {
     class View {
         private instance;
         constructor(template: any, onload?: Function);
-        public getInstance(): HTMLElement;
+        public getDom(): HTMLElement;
         public getHTMLElementsByName(name: string): HTMLElement[];
         private _traversAllChildNodes(visitor, instance);
         public getHTMLElementById(id: string): HTMLElement;
@@ -77,14 +77,17 @@ declare module tsc.util {
         add(item: T);
         remove(item: T);
         get(index: number): T;
+        size(): number;
     }
 }
 declare module tsc.util {
     class LinkedList<T> implements util.List<T> {
         private first;
+        private listsize;
         public add(item: T): void;
         public remove(item: T): void;
         public get(index: number): T;
+        public size(): number;
     }
 }
 declare module tsc.util {

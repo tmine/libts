@@ -13,7 +13,8 @@ module tsc.util{
 	
 	export class LinkedList<T> implements tsc.util.List<T> {
 		private first : ListNode;
-		
+		private listsize : number = 0;
+
 		public add(item : T){
 			if(this.first == null) this.first = new ListNode(item);
 			
@@ -23,6 +24,8 @@ module tsc.util{
 			}
 			last.next = new ListNode(item);
 			last.next.prev = last;
+
+			this.listsize++;
 		}
 		public remove(item : T){
 			if(this.first == null) return;
@@ -36,8 +39,11 @@ module tsc.util{
 				}
 				node = node.next;
 			}
+
+			this.listsize--;
 		}
 		public get(index : number) : T{
+			index++;
 			if(index == 0) return null;
 			
 			var node : ListNode = this.first;
@@ -46,6 +52,9 @@ module tsc.util{
 				else node = node.next;
 			}
 			return node.item;
+		}
+		public size() : number {
+			return this.listsize;
 		}
 	}
 }

@@ -213,6 +213,8 @@ var tsc;
                     if (template.nodeName == "TEMPLATE") {
                         this.instance = document.createElement("span");
                         this.instance.innerHTML = template.innerHTML;
+                    } else if (template.parentNode == null) {
+                        this.instance = template;
                     } else {
                         this.instance = template.cloneNode(true);
                     }
@@ -222,7 +224,7 @@ var tsc;
                     return false;
                 }
             }
-            View.prototype.getInstance = function () {
+            View.prototype.getDom = function () {
                 return this.instance;
             };
 
@@ -366,6 +368,7 @@ var tsc;
 
         var LinkedList = (function () {
             function LinkedList() {
+                this.listsize = 0;
             }
             LinkedList.prototype.add = function (item) {
                 if (this.first == null)
@@ -377,6 +380,8 @@ var tsc;
                 }
                 last.next = new ListNode(item);
                 last.next.prev = last;
+
+                this.listsize++;
             };
             LinkedList.prototype.remove = function (item) {
                 if (this.first == null)
@@ -391,8 +396,11 @@ var tsc;
                     }
                     node = node.next;
                 }
+
+                this.listsize--;
             };
             LinkedList.prototype.get = function (index) {
+                index++;
                 if (index == 0)
                     return null;
 
@@ -404,6 +412,9 @@ else
                         node = node.next;
                 }
                 return node.item;
+            };
+            LinkedList.prototype.size = function () {
+                return this.listsize;
             };
             return LinkedList;
         })();

@@ -3,5 +3,6 @@ module tsc.util{
 		add(item : T);
 		remove(item : T);
 		get(index : number) : T;
+		size() : number;
 	}
 }

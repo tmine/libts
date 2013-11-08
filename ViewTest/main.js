@@ -96,6 +96,8 @@ var tsc;
                     if (template.nodeName == "TEMPLATE") {
                         this.instance = document.createElement("span");
                         this.instance.innerHTML = template.innerHTML;
+                    } else if (template.parentNode == null) {
+                        this.instance = template;
                     } else {
                         this.instance = template.cloneNode(true);
                     }
@@ -105,7 +107,7 @@ var tsc;
                     return false;
                 }
             }
-            View.prototype.getInstance = function () {
+            View.prototype.getDom = function () {
                 return this.instance;
             };
 
@@ -168,7 +170,7 @@ var MyView = (function (_super) {
 
         // construct your view
         _super.call(this, templateElement, function () {
-            document.body.appendChild(_this.getInstance());
+            document.body.appendChild(_this.getDom());
             var element = _this.getHTMLElementById("title");
             element.innerHTML = "Blubber";
         });
@@ -182,7 +184,7 @@ var MyOtherView = (function (_super) {
         var _this = this;
         // construct your view
         _super.call(this, "Template.html", function () {
-            document.body.appendChild(_this.getInstance());
+            document.body.appendChild(_this.getDom());
             setTimeout(function () {
                 var element = _this.getHTMLElementsByName("title")[0];
                 element.innerHTML = "My new Title";

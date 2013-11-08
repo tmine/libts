@@ -33,6 +33,8 @@ module tsc.ui{
 				if(template.nodeName == "TEMPLATE"){
 					this.instance = document.createElement("span");
 					this.instance.innerHTML = template.innerHTML;
+				} else if(template.parentNode == null) {
+					this.instance = template;
 				} else {
 					this.instance = template.cloneNode(true);
 				}
@@ -43,7 +45,7 @@ module tsc.ui{
 			
 		}
 		
-		public getInstance() : HTMLElement {
+		public getDom() : HTMLElement {
 			return this.instance;
 		}
 		

@@ -10,7 +10,7 @@ class MyView extends tsc.ui.View{
 
 		// construct your view
 		super(templateElement, () => {
-			document.body.appendChild(this.getInstance());
+			document.body.appendChild(this.getDom());
 			var element = this.getHTMLElementById("title");
 			element.innerHTML = "Blubber";
 		});
@@ -22,7 +22,7 @@ class MyOtherView extends tsc.ui.View{
     constructor(){
         // construct your view
     	super("Template.html", () => {
-			document.body.appendChild(this.getInstance());
+			document.body.appendChild(this.getDom());
 			setTimeout(() => {
                 var element = this.getHTMLElementsByName("title")[0];
         		element.innerHTML = "My new Title";
