@@ -9,5 +9,9 @@ module tsc.util{
 		public pop() : T {
 			return this.array.pop();
 		}
+
+		public size() : number {
+			return this.array.length;
+		}
 	}
 }
