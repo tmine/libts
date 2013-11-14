@@ -10,8 +10,18 @@ module tsc.util{
 			return this.array.pop();
 		}
 
+		public peek() : T {
+			var item : T = this.array.pop();	
+			this.array.push(item);
+			return item;
+		}
+
 		public size() : number {
 			return this.array.length;
+		}
+
+		public empty() : boolean {
+			return this.array.length == 0;
 		}
 	}
 }
