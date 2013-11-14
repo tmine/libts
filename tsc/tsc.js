@@ -489,6 +489,20 @@ var tsc;
             Stack.prototype.pop = function () {
                 return this.array.pop();
             };
+
+            Stack.prototype.peek = function () {
+                var item = this.array.pop();
+                this.array.push(item);
+                return item;
+            };
+
+            Stack.prototype.size = function () {
+                return this.array.length;
+            };
+
+            Stack.prototype.empty = function () {
+                return this.array.length == 0;
+            };
             return Stack;
         })();
         util.Stack = Stack;

@@ -119,5 +119,8 @@ declare module tsc.util {
         private array;
         public push(item: T): void;
         public pop(): T;
+        public peek(): T;
+        public size(): number;
+        public empty(): boolean;
     }
 }
