@@ -16,7 +16,7 @@ module tsc.ui{
 		private _load(xml : boolean, path : string, callback? : Function) : any {
 			var xhr = new XMLHttpRequest();
 			xhr.onreadystatechange = function(){
-				if (xhr.readyState == 4 && xhr.status == 200){
+				if (xhr.readyState == 4/* && xhr.status == 200*/){
 					if(callback){
 						if(xml) callback(xhr.responseXML);
 						else 	callback(xhr.responseText);
