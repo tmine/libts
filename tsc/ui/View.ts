@@ -74,9 +74,19 @@ module tsc.ui{
 		}
 
 		public append(parent : HTMLElement) : void{
-			if(parent && this.getInstance()) parent.appendChild(this.getInstance());
+			if(parent && this.instance) parent.appendChild(this.instance);
 		}
 		
+        public supplant(o) : void {
+            this.instance.innerHTML = this.instance.innerHTML.replace(
+                /\{([^{}]*)\}/g,
+                function (a, b) {
+                    var r = o[b];
+                    return typeof r === 'string' || typeof r === 'number' ? r : a;
+                }
+            );
+        }
+        
 		public getHTMLElementsByName(name : string) : Array<HTMLElement>{
 			var elements = new Array<HTMLElement>();
 			this._traversAllChildNodes(function(element : HTMLElement){
