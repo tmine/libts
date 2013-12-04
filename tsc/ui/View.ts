@@ -6,8 +6,41 @@ declare class XSLTProcessor{
 }
 
 module tsc.ui{
-	var ResourceLoader = tsc.ui.ResourceLoader;
-
+    
+    class TemplateCache{
+        private static cache: Array<HTMLElement> = new Array<HTMLElement>();
+        
+        public static put(key: string, element: HTMLElement): void {
+            var styles = element.getElementsByTagName("style");
+            
+            for(var i=0; i<styles.length; i++){
+                document.head.appendChild(styles[i]);
+            }
+            for(var i=0; i<styles.length; i++){
+                element.removeChild(styles[i]);
+            }
+            
+            TemplateCache.cache[key] = <HTMLElement> element.cloneNode(true);
+        }
+        
+        public static get(key: string) : HTMLElement {
+            var element: HTMLElement = TemplateCache.cache[key];
+            if(element){
+                element = <HTMLElement> element.cloneNode(true);
+                
+                var styles = element.getElementsByTagName("style");
+                for(var i=0; i<styles.length; i++){
+                    element.removeChild(styles[i]);
+                }
+                
+                return element;
+            } else {
+                return null;
+            }
+        }
+        
+    }
+    
 	export class View{
 		private instance : HTMLElement;
 		
@@ -17,11 +50,9 @@ module tsc.ui{
 		// - Path (string) Content of this HTML File will be loaded inside a span element which will be you instance object
 		constructor(template : any, onload? : Function, data? : Object, match? : string){
 			if(template.constructor === String){
-				if(!template || template == ""){
-					return false;
-				}
+				if(!template || template == "") return false;
 				
-				if(template.indexOf(".xsl") != -1){
+                if(template.indexOf(".xsl") != -1){
 					if(onload){
 						var _this = this;
 						new ResourceLoader().loadXML(template, function(xsl) {
@@ -41,16 +72,31 @@ module tsc.ui{
 				} else {
 					if(onload){
 						var _this = this;
-						new ResourceLoader().load(template, function(content) {				
-							_this.instance = document.createElement("span");
-							_this.instance.innerHTML = content;
-							
-							setTimeout(onload, 0);
-						});
+                        
+                        var instance: HTMLElement = TemplateCache.get(template);
+                        if(instance){
+                            this.instance = instance;
+                        } else {
+    						new ResourceLoader().load(template, function(content) {				
+    							_this.instance = document.createElement("span");
+    							_this.instance.innerHTML = content;
+    							
+                                TemplateCache.put(template, _this.instance);
+                                
+    							setTimeout(onload, 0);
+    						});
+                        }
 					} else {
-						var content = new ResourceLoader().load(template);
-						this.instance = document.createElement("span");
-						this.instance.innerHTML = content;
+						var instance: HTMLElement = TemplateCache.get(template);
+                        if(instance){
+                            this.instance = instance;
+                        } else {
+                            var content = new ResourceLoader().load(template);
+    						this.instance = document.createElement("span");
+    						this.instance.innerHTML = content;
+                            
+                            TemplateCache.put(template, this.instance);
+                        }
 					}
 				}
 			}else if(template instanceof HTMLElement){
