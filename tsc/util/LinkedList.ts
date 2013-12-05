@@ -33,8 +33,8 @@ module tsc.util{
 			var node : ListNode = this.first;
 			while(node.next != null){
 				if(node.item == item){
-					node.prev.next = node.next;
-					node.next.prev = node.prev;
+					if(node.prev) node.prev.next = node.next;
+					if(node.next) node.next.prev = node.prev;
 					break;
 				}
 				node = node.next;
