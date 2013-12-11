@@ -26,13 +26,7 @@ module tsc.ui{
         public static get(key: string) : HTMLElement {
             var element: HTMLElement = TemplateCache.cache[key];
             if(element){
-                element = <HTMLElement> element.cloneNode(true);
-                
-                var styles = element.getElementsByTagName("style");
-                for(var i=0; i<styles.length; i++){
-                    element.removeChild(styles[i]);
-                }
-                
+                element = <HTMLElement> element.cloneNode(true);                
                 return element;
             } else {
                 return null;
