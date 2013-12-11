@@ -134,6 +134,10 @@ module tsc.ui{
         }
         
 		public getHTMLElementsByName(name : string) : Array<HTMLElement>{
+            if(this.instance.querySelector){
+                return <any> this.instance.querySelectorAll("[name="+name+"]");
+            }
+            
 			var elements = new Array<HTMLElement>();
 			this._traversAllChildNodes(function(element : HTMLElement){
 				if(element.getAttribute && element.getAttribute("name") == name) elements.push(element); 
@@ -142,7 +146,12 @@ module tsc.ui{
 		}
 
 		public getHTMLElementsByAttribute(attribute : string, value : string) : Array<HTMLElement>{
-			var elements = new Array<HTMLElement>();
+			if(this.instance.querySelector){
+                if(attribute === "class") return <any> this.instance.querySelectorAll("."+value);
+                return <any> this.instance.querySelectorAll("["+attribute+"="+value+"]");
+            }
+            
+            var elements = new Array<HTMLElement>();
 			this._traversAllChildNodes(function(element : HTMLElement){
 				if(element.getAttribute && element.getAttribute(attribute) == value) elements.push(element); 
 			}, this.instance);
@@ -162,6 +171,10 @@ module tsc.ui{
 		}
 		
 		public getHTMLElementById(id : string) : HTMLElement{
+            if(this.instance.querySelector){
+                return <HTMLElement>this.instance.querySelector("#"+id);
+            }
+            
 			return this._getHTMLElementById(id, this.instance);
 		}
 		
