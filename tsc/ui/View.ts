@@ -39,7 +39,7 @@ module tsc.ui{
 		private instance : HTMLElement;
 		
 		// you can construct your view with: 
-		// - HTMLElement (will be cloned)
+		// - HTMLElement
 		// - Template HTMLElement, you will receive the content of the template Element in a new span 
 		// - Path (string) Content of this HTML File will be loaded inside a span element which will be you instance object
 		constructor(template : any, onload? : Function, data? : Object, match? : string){
