@@ -39,15 +39,25 @@ declare module tsc.ui {
         static getTemplateNode(name: string): HTMLElement;
     }
 }
+declare class XSLTProcessor {
+    public importStylesheet(xsl: any);
+    public transformToFragment(xml: any, doc: any);
+}
 declare module tsc.ui {
     class View {
         private instance;
-        constructor(template: any, onload?: Function);
+        constructor(template: any, onload?: Function, data?: Object, match?: string);
         public getDom(): HTMLElement;
+        public append(parent: HTMLElement): void;
+        public deinit(): void;
+        public supplant(o): void;
         public getHTMLElementsByName(name: string): HTMLElement[];
+        public getHTMLElementsByAttribute(attribute: string, value: string): HTMLElement[];
         private _traversAllChildNodes(visitor, instance);
+        public traversAllChildNodes(visitor: Function, instance: HTMLElement): void;
         public getHTMLElementById(id: string): HTMLElement;
         private _getHTMLElementById(id, instance);
+        private static toXML;
     }
 }
 declare module tsc.util {

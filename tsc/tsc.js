@@ -135,7 +135,7 @@ var tsc;
             ResourceLoader.prototype._load = function (xml, path, callback) {
                 var xhr = new XMLHttpRequest();
                 xhr.onreadystatechange = function () {
-                    if (xhr.readyState == 4 && xhr.status == 200) {
+                    if (xhr.readyState == 4) {
                         if (callback) {
                             if (xml)
                                 callback(xhr.responseXML);
@@ -179,35 +179,95 @@ var tsc;
     })(tsc.ui || (tsc.ui = {}));
     var ui = tsc.ui;
 })(tsc || (tsc = {}));
+/// <reference path="ResourceLoader.ts"/>
 var tsc;
 (function (tsc) {
-    /// <reference path="ResourceLoader.ts"/>
     (function (ui) {
-        var ResourceLoader = tsc.ui.ResourceLoader;
+        var TemplateCache = (function () {
+            function TemplateCache() {
+            }
+            TemplateCache.put = function (key, element) {
+                var styles = element.getElementsByTagName("style");
+
+                for (var i = 0; i < styles.length; i++) {
+                    document.head.appendChild(styles[i]);
+                }
+                for (var i = 0; i < styles.length; i++) {
+                    element.removeChild(styles[i]);
+                }
+
+                TemplateCache.cache[key] = element.cloneNode(true);
+            };
+
+            TemplateCache.get = function (key) {
+                var element = TemplateCache.cache[key];
+                if (element) {
+                    element = element.cloneNode(true);
+                    return element;
+                } else {
+                    return null;
+                }
+            };
+            TemplateCache.cache = new Array();
+            return TemplateCache;
+        })();
 
         var View = (function () {
             // you can construct your view with:
-            // - HTMLElement (will be cloned)
+            // - HTMLElement
             // - Template HTMLElement, you will receive the content of the template Element in a new span
             // - Path (string) Content of this HTML File will be loaded inside a span element which will be you instance object
-            function View(template, onload) {
+            function View(template, onload, data, match) {
                 if (template.constructor === String) {
-                    if (!template || template == "") {
+                    if (!template || template == "")
                         return false;
-                    }
 
-                    if (onload) {
-                        var _this = this;
-                        new ResourceLoader().load(template, function (content) {
-                            _this.instance = document.createElement("span");
-                            _this.instance.innerHTML = content;
-
-                            setTimeout(onload, 0);
-                        });
+                    if (template.indexOf(".xsl") != -1) {
+                        if (onload) {
+                            var _this = this;
+                            new ui.ResourceLoader().loadXML(template, function (xsl) {
+                                var xsltProcessor = new XSLTProcessor();
+                                xsltProcessor.importStylesheet(xsl);
+                                var xml = View.toXML(data, match);
+                                _this.instance = xsltProcessor.transformToFragment(xml, document);
+                                setTimeout(onload, 0);
+                            });
+                        } else {
+                            var xsl = new ui.ResourceLoader().loadXML(template);
+                            var xsltProcessor = new XSLTProcessor();
+                            xsltProcessor.importStylesheet(xsl);
+                            var xml = View.toXML(data, match);
+                            this.instance = xsltProcessor.transformToFragment(xml, document);
+                        }
                     } else {
-                        var content = new ResourceLoader().load(template);
-                        this.instance = document.createElement("span");
-                        this.instance.innerHTML = content;
+                        if (onload) {
+                            var _this = this;
+
+                            var instance = TemplateCache.get(template);
+                            if (instance) {
+                                this.instance = instance;
+                            } else {
+                                new ui.ResourceLoader().load(template, function (content) {
+                                    _this.instance = document.createElement("span");
+                                    _this.instance.innerHTML = content;
+
+                                    TemplateCache.put(template, _this.instance);
+
+                                    setTimeout(onload, 0);
+                                });
+                            }
+                        } else {
+                            var instance = TemplateCache.get(template);
+                            if (instance) {
+                                this.instance = instance;
+                            } else {
+                                var content = new ui.ResourceLoader().load(template);
+                                this.instance = document.createElement("span");
+                                this.instance.innerHTML = content;
+
+                                TemplateCache.put(template, this.instance);
+                            }
+                        }
                     }
                 } else if (template instanceof HTMLElement) {
                     if (template.nodeName == "TEMPLATE") {
@@ -216,7 +276,7 @@ var tsc;
                     } else if (template.parentNode == null) {
                         this.instance = template;
                     } else {
-                        this.instance = template.cloneNode(true);
+                        this.instance = template;
                     }
                     if (onload)
                         setTimeout(onload, 0);
@@ -228,10 +288,44 @@ var tsc;
                 return this.instance;
             };
 
+            View.prototype.append = function (parent) {
+                if (parent && this.instance)
+                    parent.appendChild(this.instance);
+            };
+
+            View.prototype.deinit = function () {
+            };
+
+            View.prototype.supplant = function (o) {
+                this.instance.innerHTML = this.instance.innerHTML.replace(/\{([^{}]*)\}/g, function (a, b) {
+                    var r = o[b];
+                    return typeof r === 'string' || typeof r === 'number' ? r : a;
+                });
+            };
+
             View.prototype.getHTMLElementsByName = function (name) {
+                if (this.instance.querySelector) {
+                    return this.instance.querySelectorAll("[name=" + name + "]");
+                }
+
                 var elements = new Array();
                 this._traversAllChildNodes(function (element) {
                     if (element.getAttribute && element.getAttribute("name") == name)
+                        elements.push(element);
+                }, this.instance);
+                return elements;
+            };
+
+            View.prototype.getHTMLElementsByAttribute = function (attribute, value) {
+                if (this.instance.querySelector) {
+                    if (attribute === "class")
+                        return this.instance.querySelectorAll("." + value);
+                    return this.instance.querySelectorAll("[" + attribute + "=" + value + "]");
+                }
+
+                var elements = new Array();
+                this._traversAllChildNodes(function (element) {
+                    if (element.getAttribute && element.getAttribute(attribute) == value)
                         elements.push(element);
                 }, this.instance);
                 return elements;
@@ -245,7 +339,15 @@ var tsc;
                 }
             };
 
+            View.prototype.traversAllChildNodes = function (visitor, instance) {
+                this._traversAllChildNodes(visitor, instance);
+            };
+
             View.prototype.getHTMLElementById = function (id) {
+                if (this.instance.querySelector) {
+                    return this.instance.querySelector("#" + id);
+                }
+
                 return this._getHTMLElementById(id, this.instance);
             };
 
@@ -261,6 +363,30 @@ var tsc;
                 }
 
                 return null;
+            };
+
+            View.toXML = function (obj, name) {
+                if (!name)
+                    name = "root";
+                var xml = document.createElement("" + name);
+                for (var prop in obj) {
+                    if (obj.hasOwnProperty(prop)) {
+                        if (obj[prop] instanceof Array) {
+                            for (var i = 0; i < obj[prop].length; i++) {
+                                xml.appendChild(View.toXML(obj[prop][i], prop));
+                            }
+                        } else if (typeof obj[prop] == "object") {
+                            xml.appendChild(View.toXML(obj[prop], prop));
+                        } else if (typeof obj[prop] == "function") {
+                        } else {
+                            var element = document.createElement(prop);
+                            var value = document.createTextNode("" + obj[prop]);
+                            element.appendChild(value);
+                            xml.appendChild(element);
+                        }
+                    }
+                }
+                return xml;
             };
             return View;
         })();
@@ -390,8 +516,10 @@ var tsc;
                 var node = this.first;
                 while (node.next != null) {
                     if (node.item == item) {
-                        node.prev.next = node.next;
-                        node.next.prev = node.prev;
+                        if (node.prev)
+                            node.prev.next = node.next;
+                        if (node.next)
+                            node.next.prev = node.prev;
                         break;
                     }
                     node = node.next;
