@@ -116,6 +116,10 @@ module tsc.ui{
 		public append(parent : HTMLElement) : void{
 			if(parent && this.instance) parent.appendChild(this.instance);
 		}
+        
+        public deinit(): void{
+            
+        }
 		
         public supplant(o) : void {
             this.instance.innerHTML = (<any>this.instance.innerHTML.replace)(
