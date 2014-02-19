@@ -44,7 +44,7 @@ module tsc.ui{
 		// - Path (string) Content of this HTML File will be loaded inside a span element which will be you instance object
 		constructor(template : any, onload? : Function, data? : Object, match? : string){
 			if(template.constructor === String){
-				if(!template || template == "") return false;
+				if(!template || template == "") return <any>false;
 				
                 if(template.indexOf(".xsl") != -1){
 					if(onload){
@@ -104,7 +104,7 @@ module tsc.ui{
 				}
 				if(onload) setTimeout(onload, 0);
 			}else{
-				return false;
+				return <any>false;
 			}
 			
 		}
@@ -122,7 +122,7 @@ module tsc.ui{
         }
 		
         public supplant(o) : void {
-            this.instance.innerHTML = this.instance.innerHTML.replace(
+            this.instance.innerHTML = (<any>this.instance.innerHTML.replace)(
                 /\{([^{}]*)\}/g,
                 function (a, b) {
                     var r = o[b];
