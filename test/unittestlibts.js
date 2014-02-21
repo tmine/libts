@@ -622,6 +622,8 @@ var ts;
             };
 
             Stack.prototype.peek = function () {
+                if (this.empty())
+                    return;
                 var item = this.array.pop();
                 this.array.push(item);
                 return item;
@@ -640,3 +642,4 @@ var ts;
     })(ts.util || (ts.util = {}));
     var util = ts.util;
 })(ts || (ts = {}));
+exports.ts = ts;

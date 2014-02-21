@@ -133,10 +133,12 @@ declare module ts.util {
 declare module ts.util {
     class Stack<T> {
         private array;
+        constructor(in_array?: T[]);
         public push(item: T): void;
         public pop(): T;
         public peek(): T;
         public size(): number;
         public empty(): boolean;
+        public toArray(): T[];
     }
 }

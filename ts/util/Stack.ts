@@ -1,7 +1,12 @@
 module ts.util{
 	export class Stack<T>{
-		private array : Array<T> = new Array<T>();
+		private array : Array<T>;
 		
+		constructor(in_array?: Array<T>){
+			if(in_array) this.array = in_array;
+			else this.array = new Array<T>();
+		}
+
 		public push(item : T) : void{
 			this.array.push(item);
 		}
@@ -11,9 +16,8 @@ module ts.util{
 		}
 
 		public peek() : T {
-			var item : T = this.array.pop();	
-			this.array.push(item);
-			return item;
+			if(this.empty()) return;
+			return this.array[this.array.length - 1];
 		}
 
 		public size() : number {
@@ -22,6 +26,10 @@ module ts.util{
 
 		public empty() : boolean {
 			return this.array.length == 0;
+		}
+
+		public toArray(): Array<T> {
+			return this.array;
 		}
 	}
 }
