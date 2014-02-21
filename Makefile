@@ -1,4 +1,4 @@
-all: yeti
+all: tsc
 
 tsc:
 	tsc libts.ts  -d -out libts.js
