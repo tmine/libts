@@ -1,16 +1,12 @@
-all: tsc ThreadingTest ViewTest
-
-ThreadingTest:
-	tsc ThreadingTest/main.ts -out ThreadingTest/main.js
-	cp tsc/lang/WorkerSource.js ThreadingTest/WorkerSource.js
-
-ViewTest:
-	tsc ViewTest/main.ts -out ViewTest/main.js
+all: tsc
 
 tsc:
-	tsc tsc/tsc.ts -out tsc/tsc.js
-	cp tsc/lang/WorkerSource.js tsc/WorkerSource.js
-	cat tsc/*/*.ts >> tsc/tsc.lib.ts
-	tsc tsc/tsc.ts -d -out tsc/tsc.d.ts
+	tsc libts.ts  -d -out libts.js
+	cp ts/lang/WorkerSource.js WorkerSource.js
 
-.PHONY: tsc ViewTest ThreadingTest
+test:
+	tsc test/*.ts -out test/test.js
+	cat test/nodeXMLHttpRequest.js libts.js > test/unittestlibts.js.tmp && mv test/unittestlibts.js.tmp test/unittestlibts.js
+	qunit -c test/unittestlibts.js -t test/test.js
+
+.PHONY: tsc test
