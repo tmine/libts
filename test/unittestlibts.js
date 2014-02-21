@@ -610,8 +610,11 @@ var ts;
 (function (ts) {
     (function (util) {
         var Stack = (function () {
-            function Stack() {
-                this.array = new Array();
+            function Stack(in_array) {
+                if (in_array)
+                    this.array = in_array;
+                else
+                    this.array = new Array();
             }
             Stack.prototype.push = function (item) {
                 this.array.push(item);
@@ -624,9 +627,7 @@ var ts;
             Stack.prototype.peek = function () {
                 if (this.empty())
                     return;
-                var item = this.array.pop();
-                this.array.push(item);
-                return item;
+                return this.array[this.array.length - 1];
             };
 
             Stack.prototype.size = function () {
@@ -635,6 +636,10 @@ var ts;
 
             Stack.prototype.empty = function () {
                 return this.array.length == 0;
+            };
+
+            Stack.prototype.toArray = function () {
+                return this.array;
             };
             return Stack;
         })();
