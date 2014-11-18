@@ -2,7 +2,7 @@ module ts.ui{
 
 	// XMLHttpRequest for IE6, IE5
 	if (!XMLHttpRequest) {
-	      XMLHttpRequest = ActiveXObject("Microsoft.XMLHTTP");
+	      XMLHttpRequest = new ActiveXObject("Microsoft.XMLHTTP");
 	}
 
 	export class ResourceLoader{    

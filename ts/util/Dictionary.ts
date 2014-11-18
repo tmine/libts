@@ -1,5 +1,5 @@
 module ts.util{
-	export class Dictionary<any, V>{
+	export class Dictionary<V>{
 		private array : Array<V> = new Array<V>();
 		
 		public put(key : any, value : V) : void{
