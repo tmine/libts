@@ -184,7 +184,9 @@ var ts;
             TemplateCache.put = function (key, element) {
                 var styles = element.getElementsByTagName("style");
                 for (var i = 0; i < styles.length; i++) {
-                    document.head.appendChild(styles[i]);
+                    if (styles[i].getAttribute("type") == "text/css") {
+                        document.head.appendChild(styles[i]);
+                    }
                 }
                 for (var i = 0; i < styles.length; i++) {
                     element.removeChild(styles[i]);
