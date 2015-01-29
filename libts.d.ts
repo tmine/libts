@@ -16,7 +16,7 @@ declare module ts.lang {
         private threads;
         constructor();
         private run();
-        add(runnable: Runnable): void;
+        add(runnable: ts.lang.Runnable): void;
     }
 }
 declare module ts.main {
@@ -24,7 +24,7 @@ declare module ts.main {
         private static worker;
         private static scheduler;
         static init(): void;
-        static create(runnable: lang.Runnable): void;
+        static create(runnable: ts.lang.Runnable): void;
     }
 }
 declare module ts.ui {
@@ -51,8 +51,8 @@ declare module ts.ui {
         append(parent: HTMLElement): void;
         deinit(): void;
         supplant(o: any): void;
-        getHTMLElementsByName(name: string): HTMLElement[];
-        getHTMLElementsByAttribute(attribute: string, value: string): HTMLElement[];
+        getHTMLElementsByName(name: string): Array<HTMLElement>;
+        getHTMLElementsByAttribute(attribute: string, value: string): Array<HTMLElement>;
         private _traversAllChildNodes(visitor, instance);
         traversAllChildNodes(visitor: Function, instance: HTMLElement): void;
         getHTMLElementById(id: string): HTMLElement;
@@ -75,9 +75,9 @@ declare module ts.util {
         private array;
         put(key: any, value: V): void;
         get(key: any): V;
-        elements(): V[];
+        elements(): Array<V>;
         isEmpty(): boolean;
-        keys(): any[];
+        keys(): Array<any>;
         remove(key: any): V;
         size(): number;
     }
@@ -91,7 +91,7 @@ declare module ts.util {
     }
 }
 declare module ts.util {
-    class LinkedList<T> implements List<T> {
+    class LinkedList<T> implements ts.util.List<T> {
         private first;
         private listsize;
         add(item: T): void;
@@ -109,8 +109,8 @@ declare module ts.util {
     class Observable {
         private observers;
         constructor();
-        registerObserver(observer: Observer): void;
-        removeObserver(observer: Observer): void;
+        registerObserver(observer: ts.util.Observer): void;
+        removeObserver(observer: ts.util.Observer): void;
         notifyObservers(arg: any): void;
     }
 }
@@ -133,12 +133,12 @@ declare module ts.util {
 declare module ts.util {
     class Stack<T> {
         private array;
-        constructor(in_array?: T[]);
+        constructor(in_array?: Array<T>);
         push(item: T): void;
         pop(): T;
         peek(): T;
         size(): number;
         empty(): boolean;
-        toArray(): T[];
+        toArray(): Array<T>;
     }
 }

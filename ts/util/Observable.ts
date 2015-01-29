@@ -17,8 +17,10 @@ module ts.util{
         }
      
         public notifyObservers (arg : any) : void {
-            this.observers.forEach((observer : ts.util.Observer) => {
-                observer.update(arg);
+            this.observers.forEach(function(observer: ts.util.Observer) {
+                setTimeout(function(){
+                    observer.update(arg);
+                }, 0);
             });
         }
     }
