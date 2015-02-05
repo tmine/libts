@@ -56,5 +56,12 @@ module ts.util{
 		public size() : number {
 			return this.listsize;
 		}
+        public toArray() : Array<T> {
+            var array = [];
+            for(var i=0; i<this.size(); i++) {
+                array.push(this.get(i));
+            }
+            return array;
+        }
 	}
 }

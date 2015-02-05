@@ -88,6 +88,7 @@ declare module ts.util {
         remove(item: T): any;
         get(index: number): T;
         size(): number;
+        toArray(): Array<T>;
     }
 }
 declare module ts.util {
@@ -98,6 +99,7 @@ declare module ts.util {
         remove(item: T): void;
         get(index: number): T;
         size(): number;
+        toArray(): Array<T>;
     }
 }
 declare module ts.util {

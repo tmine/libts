@@ -518,6 +518,13 @@ var ts;
             LinkedList.prototype.size = function () {
                 return this.listsize;
             };
+            LinkedList.prototype.toArray = function () {
+                var array = [];
+                for (var i = 0; i < this.size(); i++) {
+                    array.push(this.get(i));
+                }
+                return array;
+            };
             return LinkedList;
         })();
         util.LinkedList = LinkedList;

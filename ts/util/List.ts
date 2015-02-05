@@ -4,5 +4,6 @@ module ts.util{
 		remove(item : T);
 		get(index : number) : T;
 		size() : number;
+        toArray(): Array<T>;
 	}
 }
