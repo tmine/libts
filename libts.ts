@@ -16,3 +16,4 @@
 /// <reference path="ts/util/RingBuffer.ts"/>
 /// <reference path="ts/util/Serializable.ts"/>
 /// <reference path="ts/util/Stack.ts"/>
+/// <reference path="ts/util/ActionList.ts"/>

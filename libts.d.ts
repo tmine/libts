@@ -144,3 +144,14 @@ declare module ts.util {
         toArray(): Array<T>;
     }
 }
+declare module ch.ts.util {
+    interface Action {
+        execute(done: Function): void;
+    }
+    class ActionList {
+        private actions;
+        add(action: Action): void;
+        executeSync(done?: Function): void;
+        executeAsync(done?: Function): void;
+    }
+}
