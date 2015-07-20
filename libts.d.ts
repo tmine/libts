@@ -50,7 +50,7 @@ declare module ts.ui {
         getDom(): HTMLElement;
         append(parent: HTMLElement): void;
         deinit(): void;
-        supplant(o: any): void;
+        supplant(o: any): View;
         getHTMLElementsByName(name: string): Array<HTMLElement>;
         getHTMLElementsByAttribute(attribute: string, value: string): Array<HTMLElement>;
         private _traversAllChildNodes(visitor, instance);
@@ -144,7 +144,7 @@ declare module ts.util {
         toArray(): Array<T>;
     }
 }
-declare module ch.ts.util {
+declare module ts.util {
     interface Action {
         execute(done: Function): void;
     }

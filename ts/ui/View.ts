@@ -123,7 +123,7 @@ module ts.ui{
             
         }
 		
-        public supplant(o) : void {
+        public supplant(o) : View {
             this.instance.innerHTML = (<any>this.instance.innerHTML.replace)(
                 /\{([^{}]*)\}/g,
                 function (a, b) {
@@ -131,6 +131,7 @@ module ts.ui{
                     return typeof r === 'string' || typeof r === 'number' ? r : a;
                 }
             );
+			return new View(this.instance);
         }
         
 		public getHTMLElementsByName(name : string) : Array<HTMLElement>{

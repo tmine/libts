@@ -296,6 +296,7 @@ var ts;
                     var r = o[b];
                     return typeof r === 'string' || typeof r === 'number' ? r : a;
                 });
+                return new View(this.instance);
             };
             View.prototype.getHTMLElementsByName = function (name) {
                 if (this.instance.querySelector) {
@@ -618,62 +619,59 @@ var ts;
         util.Stack = Stack;
     })(util = ts.util || (ts.util = {}));
 })(ts || (ts = {}));
-var ch;
-(function (ch) {
-    var ts;
-    (function (ts) {
-        var util;
-        (function (util) {
-            var ActionList = (function () {
-                function ActionList() {
-                    this.actions = new Array();
-                }
-                ActionList.prototype.add = function (action) {
-                    this.actions.push(action);
-                };
-                ActionList.prototype.executeSync = function (done) {
-                    if (this.actions.length == 0 && done)
-                        done();
-                    var i = 0;
-                    var _this = this;
-                    var callback = function () {
-                        i++;
-                        if (i == _this.actions.length) {
-                            if (done)
-                                setTimeout(done, 0);
-                        }
-                        else {
-                            setTimeout(function () {
-                                _this.actions[i].execute(callback);
-                            }, 0);
-                        }
-                    };
-                    setTimeout(function () {
-                        _this.actions[i].execute(callback);
-                    }, 0);
-                };
-                ActionList.prototype.executeAsync = function (done) {
-                    if (this.actions.length == 0 && done)
-                        done();
-                    var waiting = 0;
-                    var callback = function () {
-                        waiting--;
-                        if (waiting == 0 && done)
+var ts;
+(function (ts) {
+    var util;
+    (function (util) {
+        var ActionList = (function () {
+            function ActionList() {
+                this.actions = new Array();
+            }
+            ActionList.prototype.add = function (action) {
+                this.actions.push(action);
+            };
+            ActionList.prototype.executeSync = function (done) {
+                if (this.actions.length == 0 && done)
+                    done();
+                var i = 0;
+                var _this = this;
+                var callback = function () {
+                    i++;
+                    if (i == _this.actions.length) {
+                        if (done)
                             setTimeout(done, 0);
-                    };
-                    this.actions.forEach(function (action, index, array) {
-                        waiting++;
+                    }
+                    else {
                         setTimeout(function () {
-                            action.execute(callback);
+                            _this.actions[i].execute(callback);
                         }, 0);
-                    });
+                    }
                 };
-                return ActionList;
-            })();
-            util.ActionList = ActionList;
-        })(util = ts.util || (ts.util = {}));
-    })(ts = ch.ts || (ch.ts = {}));
-})(ch || (ch = {}));
+                setTimeout(function () {
+                    _this.actions[i].execute(callback);
+                }, 0);
+            };
+            ActionList.prototype.executeAsync = function (done) {
+                if (this.actions.length == 0 && done)
+                    done();
+                var waiting = 0;
+                var callback = function () {
+                    waiting--;
+                    if (waiting == 0 && done)
+                        setTimeout(done, 0);
+                };
+                this.actions.forEach(function (action, index, array) {
+                    waiting++;
+                    setTimeout(function () {
+                        action.execute(callback);
+                    }, 0);
+                });
+            };
+            return ActionList;
+        })();
+        util.ActionList = ActionList;
+    })(util = ts.util || (ts.util = {}));
+})(ts || (ts = {}));
 /// <reference path="ts/lang/Runnable.ts"/>
 /// <reference path="ts/lang/thread.ts"/>
 /// <reference path="ts/lang/Scheduler.ts"/>

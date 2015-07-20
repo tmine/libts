@@ -1,4 +1,4 @@
-module ch.ts.util {
+module ts.util {
 
     export interface Action {
         execute(done: Function): void;
