@@ -1,10 +1,5 @@
 /// <reference path="ResourceLoader.ts"/>
 
-declare class XSLTProcessor{
-    importStylesheet(xsl:any);
-    transformToFragment(xml: any, doc: any);
-}
-
 module ts.ui{
     
     class TemplateCache{
